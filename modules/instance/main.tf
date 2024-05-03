@@ -125,10 +125,20 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [aws_security_group.example_sg.id]
 subnet_id = aws_subnet.public1.id
 user_data = data.template_file.user_data.rendered
-
   tags = {
     Name = var.instace_tag
   }
+}
+
+#create an elastic ip address for my ec2
+resource "aws_eip" "lb" {
+  instance = aws_instance.web.id
+  domain   = "vpc"
+}
+#associate elastic ip address with ec2
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.web.id
+  allocation_id = aws_eip.lb.id
 }
 
 #Define the user data script that would install ngnix on the server for high performance and scalability

@@ -25,3 +25,13 @@ module "nginx" {
   name_sg        = "nginx_sg"
 
 }
+
+output "instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = module.nginx.instance_public_ip
+}
+
+output "elastic_ip" {
+  description = "Elastic IP address associated with the instance"
+  value       = module.nginx.elastic_ip
+}
