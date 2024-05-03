@@ -124,7 +124,8 @@ resource "aws_instance" "web" {
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.example_sg.id]
 subnet_id = aws_subnet.public1.id
-user_data = data.template_file.user_data.rendered
+#user_data = data.template_file.user_data.rendered
+user_data = file("user_data.sh")
   tags = {
     Name = var.instace_tag
   }
@@ -141,7 +142,7 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.lb.id
 }
 
-#Define the user data script that would install ngnix on the server for high performance and scalability
+/*Define the user data script that would install ngnix on the server for high performance and scalability
 data "template_file" "user_data" {
   template = <<-EOF
 #!/bin/bash
@@ -151,7 +152,7 @@ systemctl start nginx
 systemctl enable nginx
 EOF
 }
-
+*/
 #create security group for the EC2 instance
 resource "aws_security_group" "example_sg" {
   name        = var.name_sg
