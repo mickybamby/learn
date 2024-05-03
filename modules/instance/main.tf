@@ -142,7 +142,7 @@ resource "aws_key_pair" "example" {
   public_key = tls_private_key.example.public_key_openssh
 }
 
-# Save the private key to a file
+# Saving the private key to a file
 resource "local_file" "private_key" {
   content  = tls_private_key.example.private_key_pem
   filename = "nginx-key.pem"
