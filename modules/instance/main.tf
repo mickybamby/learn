@@ -124,12 +124,30 @@ resource "aws_instance" "web" {
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.example_sg.id]
 subnet_id = aws_subnet.public1.id
-#user_data = data.template_file.user_data.rendered
+key_name      = aws_key_pair.example.key_name
 user_data = file("user_data.sh")
+
   tags = {
     Name = var.instace_tag
   }
 }
+#creation  of keypair for our Ec2
+resource "tls_private_key" "example" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "example" {
+  key_name   = "nginx-key"
+  public_key = tls_private_key.example.public_key_openssh
+}
+
+# Save the private key to a file
+resource "local_file" "private_key" {
+  content  = tls_private_key.example.private_key_pem
+  filename = "nginx-key.pem"
+}
+
 
 #create an elastic ip address for my ec2
 resource "aws_eip" "lb" {
@@ -142,17 +160,6 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.lb.id
 }
 
-/*Define the user data script that would install ngnix on the server for high performance and scalability
-data "template_file" "user_data" {
-  template = <<-EOF
-#!/bin/bash
-yum update -y
-amazon-linux-extras install -y nginx1
-systemctl start nginx
-systemctl enable nginx
-EOF
-}
-*/
 #create security group for the EC2 instance
 resource "aws_security_group" "example_sg" {
   name        = var.name_sg
