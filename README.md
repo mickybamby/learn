@@ -18,20 +18,16 @@ This Terraform project provisions an AWS EC2 instance and automatically installs
 ## Usage
 
 1. Initialize the Terraform working directory:
-   <<terraform init>>
+   terraform init
 2. Review the execution plan:
-   <<terraform plan>>
+terraform plan
 3. Apply the Terraform configuration:
-   <<terraform plan>>
+   terraform plan
 This will create an EC2 instance and automatically install and configure NGINX using the `user_data.sh` script.
 
 4. After the apply is complete, retrieve the public IP address of the EC2 instance from the output.tf
 
 5. Open a web browser and navigate to `http://<public_ip>` to see the NGINX welcome page.
-
-## Cleaning Up
-
-When you're done, you can destroy the resources created by Terraform
 
 ## Customization
 
